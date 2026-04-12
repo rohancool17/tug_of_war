@@ -12,11 +12,11 @@ const endMessage = document.getElementById('end-message');
 // Game State
 let score = 0; // -100 to 100
 let isGameActive = false;
-let isDragging = false;
-let startX = 0;
-let lastX = 0;
-let aiForce = 0.1; // Slow constant pull (Easy mode)
-let playerPullPower = 0.05; // Force per pixel dragged back
+let isBtn1Down = false;
+let isBtn2Down = false;
+let isBtn3Down = false;
+let aiForce = 0.15; // Slightly faster AI pull for button mechanic
+let playerPullPower = 0.4; // Fixed pull power when buttons are coordinate
 
 // Images
 const images = {
@@ -41,14 +41,48 @@ resize();
 startButton.addEventListener('click', startGame);
 restartButton.addEventListener('click', startGame);
 
-canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
-canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
-canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
-canvas.addEventListener('touchcancel', handleTouchEnd, { passive: false });
+const btn1 = document.getElementById('btn-1');
+const btn2 = document.getElementById('btn-2');
+const btn3 = document.getElementById('btn-3');
 
-canvas.addEventListener('mousedown', handleMouseDown);
-window.addEventListener('mousemove', handleMouseMove);
-window.addEventListener('mouseup', handleMouseUp);
+const handleButtonDown = (e, btnId) => {
+    if (!isGameActive) return;
+    if (btnId === 1) { isBtn1Down = true; btn1.classList.add('pressed'); }
+    if (btnId === 2) { isBtn2Down = true; btn2.classList.add('pressed'); }
+    if (btnId === 3) { isBtn3Down = true; btn3.classList.add('pressed'); }
+    e.preventDefault();
+};
+
+const handleButtonUp = (e, btnId) => {
+    if (btnId === 1) { isBtn1Down = false; btn1.classList.remove('pressed'); }
+    if (btnId === 2) { isBtn2Down = false; btn2.classList.remove('pressed'); }
+    if (btnId === 3) { isBtn3Down = false; btn3.classList.remove('pressed'); }
+    if (e.cancelable) e.preventDefault();
+};
+
+btn1.addEventListener('touchstart', (e) => handleButtonDown(e, 1), { passive: false });
+btn2.addEventListener('touchstart', (e) => handleButtonDown(e, 2), { passive: false });
+btn3.addEventListener('touchstart', (e) => handleButtonDown(e, 3), { passive: false });
+
+btn1.addEventListener('touchend', (e) => handleButtonUp(e, 1), { passive: false });
+btn2.addEventListener('touchend', (e) => handleButtonUp(e, 2), { passive: false });
+btn3.addEventListener('touchend', (e) => handleButtonUp(e, 3), { passive: false });
+
+btn1.addEventListener('touchcancel', (e) => handleButtonUp(e, 1), { passive: false });
+btn2.addEventListener('touchcancel', (e) => handleButtonUp(e, 2), { passive: false });
+btn3.addEventListener('touchcancel', (e) => handleButtonUp(e, 3), { passive: false });
+
+// Mouse support for testing
+btn1.addEventListener('mousedown', (e) => { isBtn1Down = true; btn1.classList.add('pressed'); });
+btn2.addEventListener('mousedown', (e) => { isBtn2Down = true; btn2.classList.add('pressed'); });
+btn3.addEventListener('mousedown', (e) => { isBtn3Down = true; btn3.classList.add('pressed'); });
+
+window.addEventListener('mouseup', () => {
+    isBtn1Down = isBtn2Down = isBtn3Down = false;
+    btn1.classList.remove('pressed');
+    btn2.classList.remove('pressed');
+    btn3.classList.remove('pressed');
+});
 
 function startGame() {
     score = 0;
@@ -75,68 +109,6 @@ function endGame(winner) {
     }
 }
 
-// Input Handling
-function getAverageX(touches) {
-    if (touches.length === 0) return 0;
-    let sum = 0;
-    for (let i = 0; i < touches.length; i++) {
-        sum += touches[i].clientX;
-    }
-    return sum / touches.length;
-}
-
-function handleTouchStart(e) {
-    if (!isGameActive) return;
-    isDragging = true;
-    lastX = getAverageX(e.touches);
-    e.preventDefault();
-}
-
-function handleTouchMove(e) {
-    if (!isGameActive || !isDragging) return;
-    const currentX = getAverageX(e.touches);
-    const delta = currentX - lastX;
-    
-    // Only count dragging "away" from the center (to the right)
-    if (delta > 0) {
-        score += delta * playerPullPower;
-    }
-    
-    lastX = currentX;
-    e.preventDefault();
-}
-
-function handleTouchEnd(e) {
-    if (e.touches.length === 0) {
-        isDragging = false;
-    } else {
-        // Recalculate lastX to prevent jumps when a finger is removed
-        lastX = getAverageX(e.touches);
-    }
-    if (e.cancelable) e.preventDefault();
-}
-
-// Mouse support for testing
-function handleMouseDown(e) {
-    if (!isGameActive) return;
-    isDragging = true;
-    startX = e.clientX;
-    lastX = startX;
-}
-
-function handleMouseMove(e) {
-    if (!isGameActive || !isDragging) return;
-    const currentX = e.clientX;
-    const delta = currentX - lastX;
-    if (delta > 0) {
-        score += delta * playerPullPower;
-    }
-    lastX = currentX;
-}
-
-function handleMouseUp() {
-    isDragging = false;
-}
 
 // Game Loop
 function update() {
@@ -144,6 +116,13 @@ function update() {
 
     // AI constant pull (Force decreases score)
     score -= aiForce;
+
+    // Player Pull (Only if all 3 buttons are pressed)
+    if (isBtn1Down && isBtn2Down && isBtn3Down) {
+        score += playerPullPower;
+        
+        // Add tension to characters visuals? (optional)
+    }
 
     // Boundary check
     if (score > 100) score = 100;

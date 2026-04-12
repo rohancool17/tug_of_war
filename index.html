@@ -26,7 +26,7 @@
                 </div>
             </div>
             <button id="start-button" class="btn-primary">Start Treatment</button>
-            <p class="instructions">Hold and drag the rope to pull Team Hypertension back!</p>
+            <p class="instructions">Press and hold all three buttons below simultaneously to pull!</p>
         </div>
 
         <!-- Game Screen -->
@@ -39,7 +39,13 @@
             
             <canvas id="game-canvas"></canvas>
 
-            <div id="interaction-area"></div>
+            <div id="interaction-area">
+                <div id="button-container">
+                    <button id="btn-1" class="control-btn" aria-label="Button 1"></button>
+                    <button id="btn-2" class="control-btn" aria-label="Button 2"></button>
+                    <button id="btn-3" class="control-btn" aria-label="Button 3"></button>
+                </div>
+            </div>
         </div>
 
         <!-- End Screen -->
