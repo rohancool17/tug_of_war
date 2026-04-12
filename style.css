@@ -15,6 +15,7 @@
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
     user-select: none;
+    touch-action: none;
 }
 
 body, html {
@@ -28,9 +29,12 @@ body, html {
 #game-container {
     width: 100vw;
     height: 100vh;
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
     background: url('assets/medical_lab_background.png') no-repeat center center;
     background-size: cover;
+    overflow: hidden;
 }
 
 .screen {

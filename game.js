@@ -43,7 +43,8 @@ restartButton.addEventListener('click', startGame);
 
 canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
 canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
-canvas.addEventListener('touchend', handleTouchEnd);
+canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
+canvas.addEventListener('touchcancel', handleTouchEnd, { passive: false });
 
 canvas.addEventListener('mousedown', handleMouseDown);
 window.addEventListener('mousemove', handleMouseMove);
@@ -75,17 +76,25 @@ function endGame(winner) {
 }
 
 // Input Handling
+function getAverageX(touches) {
+    if (touches.length === 0) return 0;
+    let sum = 0;
+    for (let i = 0; i < touches.length; i++) {
+        sum += touches[i].clientX;
+    }
+    return sum / touches.length;
+}
+
 function handleTouchStart(e) {
     if (!isGameActive) return;
     isDragging = true;
-    startX = e.touches[0].clientX;
-    lastX = startX;
+    lastX = getAverageX(e.touches);
     e.preventDefault();
 }
 
 function handleTouchMove(e) {
     if (!isGameActive || !isDragging) return;
-    const currentX = e.touches[0].clientX;
+    const currentX = getAverageX(e.touches);
     const delta = currentX - lastX;
     
     // Only count dragging "away" from the center (to the right)
@@ -97,8 +106,14 @@ function handleTouchMove(e) {
     e.preventDefault();
 }
 
-function handleTouchEnd() {
-    isDragging = false;
+function handleTouchEnd(e) {
+    if (e.touches.length === 0) {
+        isDragging = false;
+    } else {
+        // Recalculate lastX to prevent jumps when a finger is removed
+        lastX = getAverageX(e.touches);
+    }
+    if (e.cancelable) e.preventDefault();
 }
 
 // Mouse support for testing
