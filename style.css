@@ -1,0 +1,244 @@
+:root {
+    --medical-blue: #0076FF;
+    --medical-light: #E5F1FF;
+    --hypertension-red: #FF3B30;
+    --hypertension-dark: #8E0000;
+    --white: #FFFFFF;
+    --shadow: rgba(0, 0, 0, 0.1);
+    --font-main: 'Inter', sans-serif;
+    --font-heading: 'Outfit', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+}
+
+body, html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #f0f2f5;
+    font-family: var(--font-main);
+}
+
+#game-container {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    background: url('assets/medical_lab_background.png') no-repeat center center;
+    background-size: cover;
+}
+
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    z-index: 10;
+}
+
+.screen.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(1.05);
+}
+
+/* Start Screen */
+#start-screen {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+}
+
+.game-title {
+    font-family: var(--font-heading);
+    font-size: 4rem;
+    color: var(--medical-blue);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.game-subtitle {
+    font-size: 1.5rem;
+    color: #444;
+    margin-bottom: 3rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.vs {
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--hypertension-red);
+    padding: 5px 10px;
+    border: 2px solid var(--hypertension-red);
+    border-radius: 50%;
+}
+
+.team-preview {
+    display: flex;
+    gap: 4rem;
+    margin-bottom: 3rem;
+}
+
+.team-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.team-card:hover {
+    transform: translateY(-10px);
+}
+
+.team-card img {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    filter: drop-shadow(0 10px 15px var(--shadow));
+}
+
+.team-card span {
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.team-card.dr span { color: var(--medical-blue); }
+.team-card.hypertension span { color: var(--hypertension-red); }
+
+.btn-primary {
+    padding: 1.2rem 3rem;
+    font-size: 1.5rem;
+    font-family: var(--font-heading);
+    font-weight: bold;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(135deg, var(--medical-blue), #00A3FF);
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(0, 118, 255, 0.3);
+    transition: all 0.3s ease;
+}
+
+.btn-primary:active {
+    transform: scale(0.95);
+    box-shadow: 0 5px 10px rgba(0, 118, 255, 0.2);
+}
+
+.instructions {
+    margin-top: 2rem;
+    color: #666;
+    font-size: 1rem;
+    font-style: italic;
+}
+
+/* Game Screen */
+#game-canvas {
+    width: 100%;
+    height: 100%;
+}
+
+.hud {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    max-width: 800px;
+    z-index: 20;
+}
+
+.score-bar {
+    height: 15px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 4px 10px var(--shadow);
+}
+
+#progress-indicator {
+    height: 100%;
+    width: 50%;
+    background: linear-gradient(to right, var(--hypertension-red), var(--medical-blue));
+    transition: width 0.1s linear;
+}
+
+#interaction-area {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 15;
+}
+
+/* End Screen */
+#end-screen {
+    background: rgba(255, 255, 255, 0.9);
+}
+
+#end-title {
+    font-size: 4rem;
+    font-family: var(--font-heading);
+    margin-bottom: 1rem;
+}
+
+.win { color: var(--medical-blue); }
+.loss { color: var(--hypertension-red); }
+
+#end-message {
+    font-size: 1.5rem;
+    margin-bottom: 3rem;
+    color: #555;
+}
+
+.btn-secondary {
+    padding: 1rem 2.5rem;
+    font-size: 1.2rem;
+    border: 2px solid var(--medical-blue);
+    border-radius: 50px;
+    background: transparent;
+    color: var(--medical-blue);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background: var(--medical-blue);
+    color: white;
+}
+
+/* Screen Shake Animation */
+@keyframes shake {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
+    30% { transform: translate(3px, 2px) rotate(0deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    70% { transform: translate(3px, 1px) rotate(-1deg); }
+    80% { transform: translate(-1px, -1px) rotate(1deg); }
+    90% { transform: translate(1px, 2px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+.shake {
+    animation: shake 0.5s;
+    animation-iteration-count: infinite;
+}
