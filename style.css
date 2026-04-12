@@ -143,10 +143,42 @@ body, html {
 }
 
 .instructions {
-    margin-top: 2rem;
+    margin-top: 1rem;
     color: #666;
     font-size: 1rem;
     font-style: italic;
+}
+
+.name-entry {
+    margin-bottom: 2rem;
+    width: 100%;
+    max-width: 400px;
+}
+
+#dr-name-input {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    font-size: 1.5rem;
+    font-family: var(--font-heading);
+    border: 2px solid rgba(0, 118, 255, 0.2);
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(5px);
+    color: var(--medical-blue);
+    text-align: center;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+#dr-name-input::placeholder {
+    color: #aaa;
+}
+
+#dr-name-input:focus {
+    border-color: var(--medical-blue);
+    background: white;
+    box-shadow: 0 0 15px rgba(0, 118, 255, 0.2);
+    transform: translateY(-2px);
 }
 
 /* Game Screen */

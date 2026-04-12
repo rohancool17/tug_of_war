@@ -8,9 +8,13 @@ const restartButton = document.getElementById('restart-button');
 const progressIndicator = document.getElementById('progress-indicator');
 const endTitle = document.getElementById('end-title');
 const endMessage = document.getElementById('end-message');
+const drNameInput = document.getElementById('dr-name-input');
+const drLabelHeader = document.getElementById('dr-label-header');
+const drLabelCard = document.getElementById('dr-label-card');
 
 // Game State
 let score = 0; // -100 to 100
+let drName = "Doctor";
 let isGameActive = false;
 let isBtn1Down = false;
 let isBtn2Down = false;
@@ -40,6 +44,12 @@ resize();
 // Event Listeners
 startButton.addEventListener('click', startGame);
 restartButton.addEventListener('click', startGame);
+
+drNameInput.addEventListener('input', () => {
+    const val = drNameInput.value.trim() || "Doctor";
+    drLabelHeader.textContent = `Team Dr. ${val}`;
+    drLabelCard.textContent = `Team Dr. ${val}`;
+});
 
 const btn1 = document.getElementById('btn-1');
 const btn2 = document.getElementById('btn-2');
@@ -85,6 +95,7 @@ window.addEventListener('mouseup', () => {
 });
 
 function startGame() {
+    drName = drNameInput.value.trim() || "Doctor";
     score = 0;
     isGameActive = true;
     startScreen.classList.add('hidden');
@@ -101,7 +112,7 @@ function endGame(winner) {
     if (winner === 'dr') {
         endTitle.textContent = 'Victory!';
         endTitle.className = 'win';
-        endMessage.textContent = 'Hypertension is under control. Excellent work, Doctor!';
+        endMessage.textContent = `Combination of Tazloc Trio and Dr. ${drName} defeats hypertension`;
     } else {
         endTitle.textContent = 'Pressure Rising...';
         endTitle.className = 'loss';
