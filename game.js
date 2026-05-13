@@ -51,8 +51,16 @@ function resize() {
 window.addEventListener('resize', resize);
 resize();
 
-// Navigation Logic
-loginButton.addEventListener('click', () => {
+// Navigation helper
+function addTapListener(el, callback) {
+    el.addEventListener('click', callback);
+    el.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        callback();
+    }, { passive: false });
+}
+
+addTapListener(loginButton, () => {
     if (empCodeInput.value.trim() === 'demo' && passwordInput.value.trim() === 'demo') {
         loginError.classList.add('hidden');
         loginScreen.classList.add('hidden');
@@ -62,22 +70,22 @@ loginButton.addEventListener('click', () => {
     }
 });
 
-hcpSubmitButton.addEventListener('click', () => {
+addTapListener(hcpSubmitButton, () => {
     const val = hcpNameInput.value.trim();
     if (val) hcpName = val;
     hcpScreen.classList.add('hidden');
     descriptionScreen.classList.remove('hidden');
 });
 
-descNextButton.addEventListener('click', () => {
+addTapListener(descNextButton, () => {
     descriptionScreen.classList.add('hidden');
     introHcpName.textContent = hcpName;
     introScreen.classList.remove('hidden');
 });
 
-introStartButton.addEventListener('click', startGame);
+addTapListener(introStartButton, startGame);
 
-restartButton.addEventListener('click', () => {
+addTapListener(restartButton, () => {
     endScreen.classList.add('hidden');
     // Reset inputs
     hcpNameInput.value = '';
