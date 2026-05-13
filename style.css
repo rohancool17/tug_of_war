@@ -102,6 +102,8 @@ body, html {
 .image-button {
     cursor: pointer;
     transition: transform 0.2s ease;
+    max-width: 250px; /* Constrain huge PNG sizes */
+    height: auto;
 }
 .image-button:active {
     transform: scale(0.95);
@@ -110,7 +112,12 @@ body, html {
 #desc-next-button {
     position: absolute;
     bottom: 10%;
-    right: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px; /* small */
+}
+#desc-next-button:active {
+    transform: translateX(-50%) scale(0.95);
 }
 
 .intro-dynamic-text {
@@ -126,10 +133,17 @@ body, html {
 .intro-instructions {
     position: absolute;
     bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+    width: 100%;
+}
+
+#intro-start-button {
+    width: 280px; /* appropriately sized */
 }
 
 .intro-instructions p {
@@ -257,6 +271,13 @@ body, html {
 #restart-button {
     position: absolute;
     bottom: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px;
+    height: auto;
+}
+#restart-button:active {
+    transform: translateX(-50%) scale(0.95);
 }
 
 /* Screen Shake Animation */
