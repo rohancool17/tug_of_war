@@ -25,13 +25,11 @@ let playerPullPower = 0.4; // Fixed pull power when buttons are coordinate
 // Images
 const images = {
     background: new Image(),
-    dr: new Image(),
-    hypertension: new Image()
+    tugOfWar: new Image()
 };
 
 images.background.src = 'assets/medical_lab_background.png';
-images.dr.src = 'assets/team_dr_icon.png';
-images.hypertension.src = 'assets/team_hypertension_icon.png';
+images.tugOfWar.src = 'assets/tug of war.png';
 
 // Setup Canvas size
 function resize() {
@@ -161,45 +159,24 @@ function update() {
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    // Draw rope
     const centerY = canvas.height * 0.6;
-    const ropeStartX = 0;
-    const ropeEndX = canvas.width;
     const ropeCurrentPos = (canvas.width / 2) + (score * (canvas.width / 200));
 
-    // Rope Line
-    ctx.beginPath();
-    ctx.strokeStyle = '#8B4513';
-    ctx.lineWidth = 15;
-    ctx.lineCap = 'round';
+    // Draw Tug of War Image
+    let imgWidth = canvas.width * 0.8;
+    let imgHeight = canvas.height * 0.5;
     
-    // Draw with a slight curve (sag)
-    ctx.moveTo(ropeStartX, centerY);
-    ctx.quadraticCurveTo(canvas.width / 2, centerY + 20 + (score / 5), ropeEndX, centerY);
-    ctx.stroke();
-
-    // Rope Detail (Braided look)
-    ctx.setLineDash([10, 10]);
-    ctx.strokeStyle = '#A0522D';
-    ctx.lineWidth = 10;
-    ctx.stroke();
-    ctx.setLineDash([]);
-
-    // Draw Flag in center
-    ctx.fillStyle = '#FFD700';
-    ctx.fillRect(ropeCurrentPos - 5, centerY - 25, 10, 50);
-
-    // Draw Teams
-    const spriteSize = 180;
-    const spriteY = centerY - spriteSize;
-
-    // Team Hypertension (Left)
-    const hypertensionX = ropeCurrentPos - 150 - spriteSize;
-    ctx.drawImage(images.hypertension, hypertensionX, spriteY, spriteSize, spriteSize);
+    if (images.tugOfWar.complete && images.tugOfWar.naturalWidth) {
+        imgHeight = (images.tugOfWar.naturalHeight / images.tugOfWar.naturalWidth) * imgWidth;
+    }
     
-    // Team Dr (Right)
-    const drX = ropeCurrentPos + 150;
-    ctx.drawImage(images.dr, drX, spriteY, spriteSize, spriteSize);
+    // We want the center of the image to be at ropeCurrentPos
+    const drawX = ropeCurrentPos - (imgWidth / 2);
+    // Aligning the image so that the "rope" roughly matches the centerY
+    // Assuming the rope is roughly in the middle of the image
+    const drawY = centerY - (imgHeight / 2);
 
-    // Tension Particles or dust if score moves fast (optional polish)
+    if (images.tugOfWar.complete && images.tugOfWar.naturalWidth !== 0) {
+        ctx.drawImage(images.tugOfWar, drawX, drawY, imgWidth, imgHeight);
+    }
 }
