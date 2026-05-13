@@ -32,10 +32,16 @@ body, html {
     position: fixed;
     top: 0;
     left: 0;
-    background: url('assets/medical_lab_background.png') no-repeat center center;
-    background-size: cover;
     overflow: hidden;
 }
+
+/* Backgrounds for Screens */
+#login-screen { background: url('assets/Sign in page.png') no-repeat center center; background-size: cover; }
+#hcp-screen { background: url('assets/BG.png') no-repeat center center; background-size: cover; }
+#description-screen { background: url('assets/Desciption page.png') no-repeat center center; background-size: cover; }
+#intro-screen { background: url('assets/game intro page.png') no-repeat center center; background-size: cover; }
+#game-screen { background: url('assets/game page.png') no-repeat center center; background-size: cover; }
+#end-screen { background: url('assets/last page.png') no-repeat center center; background-size: cover; }
 
 .screen {
     position: absolute;
@@ -57,128 +63,80 @@ body, html {
     transform: scale(1.05);
 }
 
-/* Start Screen */
-#start-screen {
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(10px);
-}
-
-.game-title {
-    font-family: var(--font-heading);
-    font-size: 4rem;
-    color: var(--medical-blue);
-    margin-bottom: 0.5rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-}
-
-.game-subtitle {
-    font-size: 1.5rem;
-    color: #444;
-    margin-bottom: 3rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-.vs {
-    font-size: 1rem;
-    font-weight: bold;
-    color: var(--hypertension-red);
-    padding: 5px 10px;
-    border: 2px solid var(--hypertension-red);
-    border-radius: 50%;
-}
-
-.team-preview {
-    display: flex;
-    gap: 4rem;
-    margin-bottom: 3rem;
-}
-
-.team-card {
+.login-form, .hcp-form {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    transition: transform 0.3s ease;
-}
-
-.team-card:hover {
-    transform: translateY(-10px);
-}
-
-.team-card img {
-    width: 120px;
-    height: 120px;
-    object-fit: contain;
-    filter: drop-shadow(0 10px 15px var(--shadow));
-}
-
-.team-card span {
-    font-weight: 600;
-    font-size: 1.2rem;
-}
-
-.team-card.dr span { color: var(--medical-blue); }
-.team-card.hypertension span { color: var(--hypertension-red); }
-
-.btn-primary {
-    padding: 1.2rem 3rem;
-    font-size: 1.5rem;
-    font-family: var(--font-heading);
-    font-weight: bold;
-    border: none;
-    border-radius: 50px;
-    background: linear-gradient(135deg, var(--medical-blue), #00A3FF);
-    color: white;
-    cursor: pointer;
-    box-shadow: 0 10px 20px rgba(0, 118, 255, 0.3);
-    transition: all 0.3s ease;
-}
-
-.btn-primary:active {
-    transform: scale(0.95);
-    box-shadow: 0 5px 10px rgba(0, 118, 255, 0.2);
-}
-
-.instructions {
-    margin-top: 1rem;
-    color: #666;
-    font-size: 1rem;
-    font-style: italic;
-}
-
-.name-entry {
-    margin-bottom: 2rem;
+    gap: 1.5rem;
     width: 100%;
     max-width: 400px;
+    margin-top: 15%; /* Push down slightly for center alignment */
 }
 
-#dr-name-input {
+.login-form input, .hcp-form input {
     width: 100%;
     padding: 1rem 1.5rem;
     font-size: 1.5rem;
     font-family: var(--font-heading);
     border: 2px solid rgba(0, 118, 255, 0.2);
     border-radius: 15px;
-    background: rgba(255, 255, 255, 0.5);
-    backdrop-filter: blur(5px);
-    color: var(--medical-blue);
+    background: rgba(255, 255, 255, 0.8);
+    color: #333;
     text-align: center;
-    transition: all 0.3s ease;
     outline: none;
+    transition: all 0.3s ease;
 }
 
-#dr-name-input::placeholder {
-    color: #aaa;
-}
-
-#dr-name-input:focus {
+.login-form input:focus, .hcp-form input:focus {
     border-color: var(--medical-blue);
     background: white;
     box-shadow: 0 0 15px rgba(0, 118, 255, 0.2);
-    transform: translateY(-2px);
+}
+
+.error-msg {
+    color: var(--hypertension-red);
+    margin-top: 1rem;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.image-button {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+.image-button:active {
+    transform: scale(0.95);
+}
+
+#desc-next-button {
+    position: absolute;
+    bottom: 10%;
+    right: 10%;
+}
+
+.intro-dynamic-text {
+    position: absolute;
+    left: 30%; /* Default estimate for position after 'Team', adjust as needed */
+    top: 40%;  
+    color: #322f78;
+    font-size: 3rem;
+    font-family: var(--font-heading);
+    font-weight: bold;
+}
+
+.intro-instructions {
+    position: absolute;
+    bottom: 10%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.intro-instructions p {
+    color: #000;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(255,255,255,0.8);
 }
 
 /* Game Screen */
@@ -243,10 +201,9 @@ body, html {
 }
 
 .btn-label {
-    color: var(--white);
+    color: #000;
     font-size: 1.2rem;
     font-weight: 600;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
     white-space: nowrap;
 }
 
@@ -297,40 +254,9 @@ body, html {
 .blue-btn.pressed { box-shadow: 0 0 50px #66A6FF, inset 0 0 20px rgba(255, 255, 255, 0.5); border-color: #89F7FE; }
 .orange-btn.pressed { box-shadow: 0 0 50px #FF8008, inset 0 0 20px rgba(255, 255, 255, 0.5); border-color: #FFC837; }
 
-/* End Screen */
-#end-screen {
-    background: rgba(255, 255, 255, 0.9);
-}
-
-#end-title {
-    font-size: 4rem;
-    font-family: var(--font-heading);
-    margin-bottom: 1rem;
-}
-
-.win { color: var(--medical-blue); }
-.loss { color: var(--hypertension-red); }
-
-#end-message {
-    font-size: 1.5rem;
-    margin-bottom: 3rem;
-    color: #555;
-}
-
-.btn-secondary {
-    padding: 1rem 2.5rem;
-    font-size: 1.2rem;
-    border: 2px solid var(--medical-blue);
-    border-radius: 50px;
-    background: transparent;
-    color: var(--medical-blue);
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.btn-secondary:hover {
-    background: var(--medical-blue);
-    color: white;
+#restart-button {
+    position: absolute;
+    bottom: 20%;
 }
 
 /* Screen Shake Animation */

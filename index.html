@@ -11,27 +11,43 @@
 </head>
 <body>
     <div id="game-container">
-        <!-- Start Screen -->
-        <div id="start-screen" class="screen">
-            <h1 class="game-title">Tug of War</h1>
-            <h2 class="game-subtitle"><span id="dr-label-header">Team Dr.</span> <span class="vs">vs</span> Team Hypertension</h2>
-            
-            <div class="name-entry">
-                <input type="text" id="dr-name-input" placeholder="Enter Dr. Name" maxlength="20">
+        
+        <!-- Screen 1: Login Screen -->
+        <div id="login-screen" class="screen">
+            <div class="login-form">
+                <input type="text" id="employee-code" placeholder="Employee Code">
+                <input type="password" id="password" placeholder="Password">
+                <button id="login-button" class="btn-primary">Sign In</button>
             </div>
-            <div class="team-preview">
-                <div class="team-card dr">
-                    <span id="dr-label-card">Team Dr.</span>
-                </div>
-                <div class="team-card hypertension">
-                    <span>High BP</span>
-                </div>
-            </div>
-            <button id="start-button" class="btn-primary">Start Treatment</button>
-            <p class="instructions">Press and hold all three buttons below simultaneously to pull!</p>
+            <p id="login-error" class="error-msg hidden">Invalid credentials</p>
         </div>
 
-        <!-- Game Screen -->
+        <!-- Screen 2: HCP Entry Screen -->
+        <div id="hcp-screen" class="screen hidden">
+            <div class="hcp-form">
+                <input type="text" id="hcp-name" placeholder="HCP Name">
+                <input type="text" id="hcp-code" placeholder="HCP Code">
+                <button id="hcp-submit-button" class="btn-primary">Submit</button>
+            </div>
+        </div>
+
+        <!-- Screen 3: Description Screen -->
+        <div id="description-screen" class="screen hidden">
+            <img src="assets/NEW NEXT BUTTON.png" id="desc-next-button" alt="Next" class="image-button next-btn">
+        </div>
+
+        <!-- Screen 4: Game Intro Screen -->
+        <div id="intro-screen" class="screen hidden">
+            <div class="intro-dynamic-text">
+                <span id="intro-hcp-name"></span>
+            </div>
+            <div class="intro-instructions">
+                <img src="assets/START TREATMENT.png" id="intro-start-button" alt="Start Treatment" class="image-button start-btn">
+                <p>Press and hold all three buttons below simultaneously to pull!</p>
+            </div>
+        </div>
+
+        <!-- Screen 5: Game Screen -->
         <div id="game-screen" class="screen hidden">
             <div class="hud">
                 <div class="score-bar">
@@ -59,12 +75,11 @@
             </div>
         </div>
 
-        <!-- End Screen -->
+        <!-- Screen 6: End Screen -->
         <div id="end-screen" class="screen hidden">
-            <h1 id="end-title">Result</h1>
-            <p id="end-message"></p>
-            <button id="restart-button" class="btn-secondary">Play Again</button>
+            <img src="assets/Play Again Button-06.png" id="restart-button" alt="Play Again" class="image-button restart-btn">
         </div>
+
     </div>
 
     <script type="module" src="game.js"></script>

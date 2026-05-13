@@ -1,20 +1,32 @@
 const canvas = document.getElementById('game-canvas');
 const ctx = canvas.getContext('2d');
-const startScreen = document.getElementById('start-screen');
+const progressIndicator = document.getElementById('progress-indicator');
+
+// Screens
+const loginScreen = document.getElementById('login-screen');
+const hcpScreen = document.getElementById('hcp-screen');
+const descriptionScreen = document.getElementById('description-screen');
+const introScreen = document.getElementById('intro-screen');
 const gameScreen = document.getElementById('game-screen');
 const endScreen = document.getElementById('end-screen');
-const startButton = document.getElementById('start-button');
+
+// Inputs & Texts
+const empCodeInput = document.getElementById('employee-code');
+const passwordInput = document.getElementById('password');
+const loginError = document.getElementById('login-error');
+const hcpNameInput = document.getElementById('hcp-name');
+const introHcpName = document.getElementById('intro-hcp-name');
+
+// Buttons
+const loginButton = document.getElementById('login-button');
+const hcpSubmitButton = document.getElementById('hcp-submit-button');
+const descNextButton = document.getElementById('desc-next-button');
+const introStartButton = document.getElementById('intro-start-button');
 const restartButton = document.getElementById('restart-button');
-const progressIndicator = document.getElementById('progress-indicator');
-const endTitle = document.getElementById('end-title');
-const endMessage = document.getElementById('end-message');
-const drNameInput = document.getElementById('dr-name-input');
-const drLabelHeader = document.getElementById('dr-label-header');
-const drLabelCard = document.getElementById('dr-label-card');
 
 // Game State
 let score = 0; // -100 to 100
-let drName = "Doctor";
+let hcpName = "Doctor";
 let isGameActive = false;
 let isBtn1Down = false;
 let isBtn2Down = false;
@@ -39,14 +51,37 @@ function resize() {
 window.addEventListener('resize', resize);
 resize();
 
-// Event Listeners
-startButton.addEventListener('click', startGame);
-restartButton.addEventListener('click', startGame);
+// Navigation Logic
+loginButton.addEventListener('click', () => {
+    if (empCodeInput.value.trim() === 'demo' && passwordInput.value.trim() === 'demo') {
+        loginError.classList.add('hidden');
+        loginScreen.classList.add('hidden');
+        hcpScreen.classList.remove('hidden');
+    } else {
+        loginError.classList.remove('hidden');
+    }
+});
 
-drNameInput.addEventListener('input', () => {
-    const val = drNameInput.value.trim() || "Doctor";
-    drLabelHeader.textContent = `Team Dr. ${val}`;
-    drLabelCard.textContent = `Team Dr. ${val}`;
+hcpSubmitButton.addEventListener('click', () => {
+    const val = hcpNameInput.value.trim();
+    if (val) hcpName = val;
+    hcpScreen.classList.add('hidden');
+    descriptionScreen.classList.remove('hidden');
+});
+
+descNextButton.addEventListener('click', () => {
+    descriptionScreen.classList.add('hidden');
+    introHcpName.textContent = hcpName;
+    introScreen.classList.remove('hidden');
+});
+
+introStartButton.addEventListener('click', startGame);
+
+restartButton.addEventListener('click', () => {
+    endScreen.classList.add('hidden');
+    // Reset inputs
+    hcpNameInput.value = '';
+    hcpScreen.classList.remove('hidden');
 });
 
 const btn1 = document.getElementById('btn-1');
@@ -93,11 +128,9 @@ window.addEventListener('mouseup', () => {
 });
 
 function startGame() {
-    drName = drNameInput.value.trim() || "Doctor";
     score = 0;
     isGameActive = true;
-    startScreen.classList.add('hidden');
-    endScreen.classList.add('hidden');
+    introScreen.classList.add('hidden');
     gameScreen.classList.remove('hidden');
     requestAnimationFrame(update);
 }
@@ -106,16 +139,6 @@ function endGame(winner) {
     isGameActive = false;
     gameScreen.classList.add('hidden');
     endScreen.classList.remove('hidden');
-    
-    if (winner === 'dr') {
-        endTitle.textContent = 'Victory!';
-        endTitle.className = 'win';
-        endMessage.textContent = `Combination of Tazloc Trio and Dr. ${drName} defeats hypertension`;
-    } else {
-        endTitle.textContent = 'Pressure Rising...';
-        endTitle.className = 'loss';
-        endMessage.textContent = 'Team Hypertension gained the upper hand. Keep advocating for healthy habits!';
-    }
 }
 
 
