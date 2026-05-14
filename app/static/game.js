@@ -188,7 +188,7 @@ function endGame(winner) {
 function update() {
     if (!isGameActive) return;
     score -= aiForce;
-    if (isBtn1Down && isBtn2Down && isBtn3Down) {
+    if (isBtn1Down || isBtn2Down || isBtn3Down) {
         score += playerPullPower;
     }
     if (score > 100) score = 100;
