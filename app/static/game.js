@@ -11,6 +11,7 @@ const endScreen = document.getElementById('end-screen');
 
 // Inputs & Texts
 const hcpNameInput = document.getElementById('hcp-name');
+const hcpCodeInput = document.getElementById('hcp-code');
 const introHcpName = document.getElementById('intro-hcp-name');
 
 // Buttons
@@ -22,12 +23,14 @@ const restartButton = document.getElementById('restart-button');
 // Game State
 let score = 0; // -100 to 100
 let hcpName = "Doctor";
+let hcpCode = "";
+let gameStartTime = null;
 let isGameActive = false;
 let isBtn1Down = false;
 let isBtn2Down = false;
 let isBtn3Down = false;
-let aiForce = 0.15; // Slightly faster AI pull for button mechanic
-let playerPullPower = 0.4; // Fixed pull power when buttons are coordinate
+let aiForce = 0.12;
+let playerPullPower = 0.45;
 
 // Images
 const images = {
@@ -35,7 +38,6 @@ const images = {
     tugOfWar: new Image()
 };
 
-images.background.src = '/static/assets/medical_lab_background.png';
 images.tugOfWar.src = '/static/assets/tug of war.png';
 
 // Setup Canvas size
@@ -51,22 +53,34 @@ function addTapListener(el, callback) {
     if (!el) return;
     el.addEventListener('click', callback);
     el.addEventListener('touchstart', (e) => {
-        e.preventDefault();
         callback();
-    }, { passive: false });
+    }, { passive: true });
 }
 
+// HCP Submit Logic
 addTapListener(hcpSubmitButton, () => {
-    const val = hcpNameInput.value.trim();
-    if (val) hcpName = val;
-    hcpScreen.classList.add('hidden');
-    descriptionScreen.classList.remove('hidden');
+    const name = hcpNameInput.value.trim();
+    const code = hcpCodeInput.value.trim();
+    
+    if (name && code) {
+        hcpName = name;
+        hcpCode = code;
+        hcpScreen.classList.add('hidden');
+        descriptionScreen.classList.remove('hidden');
+    } else {
+        window.alert("Please fill in both HCP Name and HCP Code to continue.");
+    }
 });
+
+// Real-time validation removal (HCP screen)
+if (hcpNameInput) hcpNameInput.addEventListener('input', () => {});
+if (hcpCodeInput) hcpCodeInput.addEventListener('input', () => {});
 
 addTapListener(descNextButton, () => {
     descriptionScreen.classList.add('hidden');
     introHcpName.textContent = hcpName;
     introScreen.classList.remove('hidden');
+    gameStartTime = Date.now();
 });
 
 addTapListener(introStartButton, startGame);
@@ -75,6 +89,7 @@ addTapListener(restartButton, () => {
     endScreen.classList.add('hidden');
     introHcpName.textContent = hcpName;
     introScreen.classList.remove('hidden');
+    gameStartTime = Date.now();
 });
 
 const btn1 = document.getElementById('btn-1');
@@ -93,7 +108,6 @@ const handleButtonUp = (e, btnId) => {
     if (btnId === 1) { isBtn1Down = false; btn1.classList.remove('pressed'); }
     if (btnId === 2) { isBtn2Down = false; btn2.classList.remove('pressed'); }
     if (btnId === 3) { isBtn3Down = false; btn3.classList.remove('pressed'); }
-    if (e.cancelable) e.preventDefault();
 };
 
 if (btn1) {
@@ -123,6 +137,7 @@ window.addEventListener('mouseup', () => {
 });
 
 function startGame() {
+    console.log("Starting Game Loop...");
     score = 0;
     isGameActive = true;
     introScreen.classList.add('hidden');
@@ -131,64 +146,59 @@ function startGame() {
 }
 
 function endGame(winner) {
+    console.warn(">>> END GAME TRIGGERED <<< Winner:", winner);
     isGameActive = false;
     gameScreen.classList.add('hidden');
     endScreen.classList.remove('hidden');
+
+    const endTime = Date.now();
+    const timeSpent = (endTime - gameStartTime) / 1000;
+    
+    fetch('/api/game/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            hcp_name: hcpName,
+            hcp_code: hcpCode,
+            time_spent: timeSpent,
+            winner: winner
+        })
+    })
+    .then(r => r.json())
+    .then(res => console.log("Save result:", res))
+    .catch(err => console.error("Save error:", err));
 }
 
-// Game Loop
 function update() {
     if (!isGameActive) return;
-
-    // AI constant pull (Force decreases score)
     score -= aiForce;
-
-    // Player Pull (Only if all 3 buttons are pressed)
     if (isBtn1Down && isBtn2Down && isBtn3Down) {
         score += playerPullPower;
     }
-
-    // Boundary check
     if (score > 100) score = 100;
     if (score < -100) score = -100;
-
-    // Update HUD
     const progressPercent = ((score + 100) / 200) * 100;
     progressIndicator.style.width = `${progressPercent}%`;
-
-    // Visual feedback (Shake if score is low)
-    if (score < -50) {
-        canvas.classList.add('shake');
-    } else {
-        canvas.classList.remove('shake');
-    }
-
-    // Win/Loss Condition
+    if (score < -50) canvas.classList.add('shake');
+    else canvas.classList.remove('shake');
     if (score >= 100) endGame('dr');
     if (score <= -100) endGame('hypertension');
-
     draw();
     requestAnimationFrame(update);
 }
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
     const centerY = canvas.height * 0.6;
     const ropeCurrentPos = (canvas.width / 2) + (score * (canvas.width / 200));
-
-    // Draw Tug of War Image
     let imgWidth = canvas.width * 0.8;
     let imgHeight = canvas.height * 0.5;
-    
     if (images.tugOfWar.complete && images.tugOfWar.naturalWidth) {
         imgHeight = (images.tugOfWar.naturalHeight / images.tugOfWar.naturalWidth) * imgWidth;
     }
-    
     const drawX = ropeCurrentPos - (imgWidth / 2);
     const drawY = centerY - (imgHeight / 2);
-
-    if (images.tugOfWar.complete && images.tugOfWar.naturalWidth !== 0) {
+    if (images.tugOfWar.complete) {
         ctx.drawImage(images.tugOfWar, drawX, drawY, imgWidth, imgHeight);
     }
 }

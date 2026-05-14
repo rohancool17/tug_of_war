@@ -29,4 +29,4 @@ pip install -r requirements.txt
 
 # Start the application
 echo "Starting Tug of War app on port $PORT..."
-uvicorn "$APP_MODULE" --host "$HOST" --port "$PORT" --reload
+exec uvicorn "app.main:app" --host "$HOST" --port "$PORT" --reload
