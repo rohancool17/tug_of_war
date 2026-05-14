@@ -3,7 +3,6 @@ const ctx = canvas.getContext('2d');
 const progressIndicator = document.getElementById('progress-indicator');
 
 // Screens
-const loginScreen = document.getElementById('login-screen');
 const hcpScreen = document.getElementById('hcp-screen');
 const descriptionScreen = document.getElementById('description-screen');
 const introScreen = document.getElementById('intro-screen');
@@ -11,14 +10,10 @@ const gameScreen = document.getElementById('game-screen');
 const endScreen = document.getElementById('end-screen');
 
 // Inputs & Texts
-const empCodeInput = document.getElementById('employee-code');
-const passwordInput = document.getElementById('password');
-const loginError = document.getElementById('login-error');
 const hcpNameInput = document.getElementById('hcp-name');
 const introHcpName = document.getElementById('intro-hcp-name');
 
 // Buttons
-const loginButton = document.getElementById('login-button');
 const hcpSubmitButton = document.getElementById('hcp-submit-button');
 const descNextButton = document.getElementById('desc-next-button');
 const introStartButton = document.getElementById('intro-start-button');
@@ -40,8 +35,8 @@ const images = {
     tugOfWar: new Image()
 };
 
-images.background.src = 'assets/medical_lab_background.png';
-images.tugOfWar.src = 'assets/tug of war.png';
+images.background.src = '/static/assets/medical_lab_background.png';
+images.tugOfWar.src = '/static/assets/tug of war.png';
 
 // Setup Canvas size
 function resize() {
@@ -53,22 +48,13 @@ resize();
 
 // Navigation helper
 function addTapListener(el, callback) {
+    if (!el) return;
     el.addEventListener('click', callback);
     el.addEventListener('touchstart', (e) => {
         e.preventDefault();
         callback();
     }, { passive: false });
 }
-
-addTapListener(loginButton, () => {
-    if (empCodeInput.value.trim() === 'demo' && passwordInput.value.trim() === 'demo') {
-        loginError.classList.add('hidden');
-        loginScreen.classList.add('hidden');
-        hcpScreen.classList.remove('hidden');
-    } else {
-        loginError.classList.remove('hidden');
-    }
-});
 
 addTapListener(hcpSubmitButton, () => {
     const val = hcpNameInput.value.trim();
@@ -87,9 +73,8 @@ addTapListener(introStartButton, startGame);
 
 addTapListener(restartButton, () => {
     endScreen.classList.add('hidden');
-    // Reset inputs
-    hcpNameInput.value = '';
-    hcpScreen.classList.remove('hidden');
+    introHcpName.textContent = hcpName;
+    introScreen.classList.remove('hidden');
 });
 
 const btn1 = document.getElementById('btn-1');
@@ -111,28 +96,30 @@ const handleButtonUp = (e, btnId) => {
     if (e.cancelable) e.preventDefault();
 };
 
-btn1.addEventListener('touchstart', (e) => handleButtonDown(e, 1), { passive: false });
-btn2.addEventListener('touchstart', (e) => handleButtonDown(e, 2), { passive: false });
-btn3.addEventListener('touchstart', (e) => handleButtonDown(e, 3), { passive: false });
-
-btn1.addEventListener('touchend', (e) => handleButtonUp(e, 1), { passive: false });
-btn2.addEventListener('touchend', (e) => handleButtonUp(e, 2), { passive: false });
-btn3.addEventListener('touchend', (e) => handleButtonUp(e, 3), { passive: false });
-
-btn1.addEventListener('touchcancel', (e) => handleButtonUp(e, 1), { passive: false });
-btn2.addEventListener('touchcancel', (e) => handleButtonUp(e, 2), { passive: false });
-btn3.addEventListener('touchcancel', (e) => handleButtonUp(e, 3), { passive: false });
-
-// Mouse support for testing
-btn1.addEventListener('mousedown', (e) => { isBtn1Down = true; btn1.classList.add('pressed'); });
-btn2.addEventListener('mousedown', (e) => { isBtn2Down = true; btn2.classList.add('pressed'); });
-btn3.addEventListener('mousedown', (e) => { isBtn3Down = true; btn3.classList.add('pressed'); });
+if (btn1) {
+    btn1.addEventListener('touchstart', (e) => handleButtonDown(e, 1), { passive: false });
+    btn1.addEventListener('touchend', (e) => handleButtonUp(e, 1), { passive: false });
+    btn1.addEventListener('touchcancel', (e) => handleButtonUp(e, 1), { passive: false });
+    btn1.addEventListener('mousedown', (e) => { isBtn1Down = true; btn1.classList.add('pressed'); });
+}
+if (btn2) {
+    btn2.addEventListener('touchstart', (e) => handleButtonDown(e, 2), { passive: false });
+    btn2.addEventListener('touchend', (e) => handleButtonUp(e, 2), { passive: false });
+    btn2.addEventListener('touchcancel', (e) => handleButtonUp(e, 2), { passive: false });
+    btn2.addEventListener('mousedown', (e) => { isBtn2Down = true; btn2.classList.add('pressed'); });
+}
+if (btn3) {
+    btn3.addEventListener('touchstart', (e) => handleButtonDown(e, 3), { passive: false });
+    btn3.addEventListener('touchend', (e) => handleButtonUp(e, 3), { passive: false });
+    btn3.addEventListener('touchcancel', (e) => handleButtonUp(e, 3), { passive: false });
+    btn3.addEventListener('mousedown', (e) => { isBtn3Down = true; btn3.classList.add('pressed'); });
+}
 
 window.addEventListener('mouseup', () => {
     isBtn1Down = isBtn2Down = isBtn3Down = false;
-    btn1.classList.remove('pressed');
-    btn2.classList.remove('pressed');
-    btn3.classList.remove('pressed');
+    if (btn1) btn1.classList.remove('pressed');
+    if (btn2) btn2.classList.remove('pressed');
+    if (btn3) btn3.classList.remove('pressed');
 });
 
 function startGame() {
@@ -149,7 +136,6 @@ function endGame(winner) {
     endScreen.classList.remove('hidden');
 }
 
-
 // Game Loop
 function update() {
     if (!isGameActive) return;
@@ -160,8 +146,6 @@ function update() {
     // Player Pull (Only if all 3 buttons are pressed)
     if (isBtn1Down && isBtn2Down && isBtn3Down) {
         score += playerPullPower;
-        
-        // Add tension to characters visuals? (optional)
     }
 
     // Boundary check
@@ -201,10 +185,7 @@ function draw() {
         imgHeight = (images.tugOfWar.naturalHeight / images.tugOfWar.naturalWidth) * imgWidth;
     }
     
-    // We want the center of the image to be at ropeCurrentPos
     const drawX = ropeCurrentPos - (imgWidth / 2);
-    // Aligning the image so that the "rope" roughly matches the centerY
-    // Assuming the rope is roughly in the middle of the image
     const drawY = centerY - (imgHeight / 2);
 
     if (images.tugOfWar.complete && images.tugOfWar.naturalWidth !== 0) {

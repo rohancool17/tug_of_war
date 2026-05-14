@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Login | Tug of War</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body class="login-page">
+    <div id="game-container">
+        <div id="login-screen" class="screen">
+            <div class="login-box">
+                <div class="login-header">
+                    <h1>Tug of War</h1>
+                    <p>Team Dr. vs Team Hypertension</p>
+                </div>
+                
+                <form action="/login" method="POST" id="login-form">
+                    <div class="input-group">
+                        <label for="username">Employee Code</label>
+                        <input type="text" id="username" name="username" placeholder="Enter your code" required autofocus>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" placeholder="••••••••" required>
+                    </div>
+
+                    {% if error %}
+                    <p id="login-error" class="error-msg">Invalid employee code or password</p>
+                    {% endif %}
+
+                    <button type="submit" id="login-button" class="btn-primary login-btn-large">Sign In</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Real-time validation: hide error message when user starts typing
+        const inputs = document.querySelectorAll('input');
+        const errorMsg = document.getElementById('login-error');
+        
+        inputs.forEach(input => {
+            input.addEventListener('input', () => {
+                if (errorMsg) {
+                    errorMsg.style.opacity = '0';
+                    setTimeout(() => {
+                        errorMsg.style.display = 'none';
+                    }, 300);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

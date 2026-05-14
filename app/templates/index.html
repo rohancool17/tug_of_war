@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, orientation=landscape">
     <title>Tug of War: Team Dr. vs Team Hypertension</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/static/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
@@ -12,29 +12,31 @@
 <body>
     <div id="game-container">
         
-        <!-- Screen 1: Login Screen -->
-        <div id="login-screen" class="screen">
-            <div class="login-form">
-                <input type="text" id="employee-code" placeholder="Employee Code">
-                <input type="password" id="password" placeholder="Password">
-                <button id="login-button" class="btn-primary">Sign In</button>
-            </div>
-            <p id="login-error" class="error-msg hidden">Invalid credentials</p>
-        </div>
-
         <!-- Screen 2: HCP Entry Screen -->
-        <div id="hcp-screen" class="screen hidden">
-            <div class="hcp-form">
-                <input type="text" id="hcp-name" placeholder="HCP Name">
-                <input type="text" id="hcp-code" placeholder="HCP Code">
-                <button id="hcp-submit-button" class="btn-primary">Submit</button>
+        <div id="hcp-screen" class="screen">
+            <div class="login-box">
+                <div class="login-header">
+                    <p>Enter the HCP information to begin</p>
+                </div>
+
+                <div class="input-group">
+                    <label for="hcp-name">HCP Name</label>
+                    <input type="text" id="hcp-name" placeholder="Enter HCP Name">
+                </div>
+
+                <div class="input-group">
+                    <label for="hcp-code">HCP Code</label>
+                    <input type="text" id="hcp-code" placeholder="Enter HCP Code">
+                </div>
+
+                <button id="hcp-submit-button" class="btn-primary login-btn-large">Submit</button>
             </div>
         </div>
 
         <!-- Screen 3: Description Screen -->
         <div id="description-screen" class="screen hidden">
             <button id="desc-next-button" class="image-button next-btn">
-                <img src="assets/NEW NEXT BUTTON.png" alt="Next">
+                <img src="/static/assets/NEW NEXT BUTTON.png" alt="Next">
             </button>
         </div>
 
@@ -45,9 +47,8 @@
             </div>
             <div class="intro-instructions">
                 <button id="intro-start-button" class="image-button start-btn">
-                    <img src="assets/START TREATMENT.png" alt="Start Treatment">
+                    <img src="/static/assets/START TREATMENT.png" alt="Start Treatment">
                 </button>
-                <p>Press and hold all three buttons below simultaneously to pull!</p>
             </div>
         </div>
 
@@ -82,12 +83,12 @@
         <!-- Screen 6: End Screen -->
         <div id="end-screen" class="screen hidden">
             <button id="restart-button" class="image-button restart-btn">
-                <img src="assets/Play Again Button-06.png" alt="Play Again">
+                <img src="/static/assets/Play Again Button-06.png" alt="Play Again">
             </button>
         </div>
 
     </div>
 
-    <script type="module" src="game.js"></script>
+    <script type="module" src="/static/game.js"></script>
 </body>
 </html>

@@ -1,0 +1,430 @@
+/* Base & Typography */
+:root {
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --bg-dark: #0f172a;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --error: #ef4444;
+    --success: #22c55e;
+    --glass: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --medical-blue: #0076FF;
+    --hypertension-red: #FF3B30;
+    --font-main: 'Inter', sans-serif;
+    --font-heading: 'Outfit', sans-serif;
+}
+
+@font-face {
+    font-family: 'Uniform Condensed';
+    src: url('/static/assets/Uniform Condensed Black.ttf') format('truetype');
+    font-weight: 1000;
+    font-style: normal;
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body,
+html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: var(--bg-dark);
+    font-family: var(--font-main);
+    color: var(--text-main);
+}
+
+h1,
+h2,
+.btn-primary {
+    font-family: var(--font-heading);
+}
+
+/* Layout */
+#game-container {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Screens */
+.screen {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.screen.hidden {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    display: none !important;
+}
+
+/* Screen Backgrounds */
+.login-page {
+    background: url('/static/assets/Sign in page.png') no-repeat center center;
+    background-size: 100% 100%;
+}
+
+#hcp-screen {
+    background: url('/static/assets/BG.png') no-repeat center center;
+    background-size: 100% 100%;
+}
+
+#description-screen {
+    background: url('/static/assets/Desciption page.png') no-repeat center center;
+    background-size: 100% 100%;
+}
+
+#intro-screen {
+    background: url('/static/assets/game intro page.png') no-repeat center center;
+    background-size: 100% 100%;
+}
+
+#game-screen {
+    background: url('/static/assets/game page.png') no-repeat center center;
+    background-size: 100% 100%;
+}
+
+#end-screen {
+    background: url('/static/assets/last page.png') no-repeat center center;
+    background-size: 100% 100%;
+}
+
+/* Login Form Integration */
+.login-box {
+    background: transparent;
+    border: none;
+    padding: 2rem;
+    width: 100%;
+    max-width: 440px;
+    box-shadow: none;
+    animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.login-header h1 {
+    font-size: 3.5rem;
+    color: #322f78;
+    /* Deep blue for readability */
+    margin-bottom: 0.5rem;
+    font-weight: 800;
+    text-shadow: 0 2px 4px rgba(255, 255, 255, 0.5);
+}
+
+.login-header p {
+    color: #4b5563;
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+/* Form Elements */
+.input-group {
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.input-group label {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #322f78;
+    margin-left: 0.5rem;
+}
+
+input {
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid rgba(50, 47, 120, 0.2);
+    padding: 1.2rem 1.5rem;
+    border-radius: 20px;
+    color: #1f2937;
+    font-size: 1.2rem;
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+input:focus {
+    outline: none;
+    border-color: #322f78;
+    background: #ffffff;
+    box-shadow: 0 0 0 5px rgba(50, 47, 120, 0.1);
+}
+
+/* Buttons */
+.btn-primary {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 1.2rem 2rem;
+    border-radius: 16px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 100%;
+    margin-top: 1rem;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-primary:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px -5px rgba(37, 99, 235, 0.5);
+}
+
+.btn-primary:active {
+    transform: translateY(1px);
+}
+
+.login-btn-large {
+    font-size: 1.3rem;
+    letter-spacing: 0.01em;
+    padding: 1.4rem;
+}
+
+/* Error Messages */
+.error-msg {
+    color: var(--error);
+    font-size: 0.95rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 12px;
+    animation: shakeError 0.4s cubic-bezier(.36, .07, .19, .97) both;
+}
+
+@keyframes shakeError {
+
+    10%,
+    90% {
+        transform: translate3d(-1px, 0, 0);
+    }
+
+    20%,
+    80% {
+        transform: translate3d(2px, 0, 0);
+    }
+
+    30%,
+    50%,
+    70% {
+        transform: translate3d(-4px, 0, 0);
+    }
+
+    40%,
+    60% {
+        transform: translate3d(4px, 0, 0);
+    }
+}
+
+/* Game Components (HUD, Buttons etc) */
+.image-button {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 0;
+}
+
+.image-button img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.image-button:active {
+    transform: scale(0.95);
+}
+
+/* Specific Button Positioning */
+#desc-next-button,
+#intro-start-button,
+#restart-button {
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    z-index: 30;
+}
+
+/* Adjust Play Again to be more central if needed, but keeping it bottom for consistency with others 
+   Actually, looking at the screenshot, it should be higher up. */
+#restart-button {
+    bottom: 35%;
+}
+
+#desc-next-button:active,
+#intro-start-button:active,
+#restart-button:active {
+    transform: translateX(-50%) scale(0.95);
+}
+
+.intro-instructions {
+    position: absolute;
+    bottom: 30px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    z-index: 25;
+}
+
+.intro-instructions p {
+    color: #322f78;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-top: 10px;
+}
+
+.intro-dynamic-text {
+    position: absolute;
+    top: 27.3%;
+    left: 64.6%;
+    color: #322f78;
+    font-size: 4.2vh;
+    /* Scale with screen height for cross-tablet consistency */
+    font-family: 'Uniform Condensed', sans-serif;
+    font-weight: 900;
+    text-align: left;
+    z-index: 10;
+    white-space: nowrap;
+}
+
+.hud {
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    max-width: 800px;
+    z-index: 20;
+}
+
+.score-bar {
+    height: 20px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+#progress-indicator {
+    height: 100%;
+    width: 50%;
+    background: linear-gradient(to right, var(--hypertension-red), var(--medical-blue));
+    transition: width 0.1s linear;
+}
+
+/* Game Controls */
+#button-container {
+    position: absolute;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 50px;
+    z-index: 25;
+}
+
+.button-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.btn-label {
+    color: white;
+    font-size: 1.3rem;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.3);
+    padding: 4px 12px;
+    border-radius: 8px;
+}
+
+.control-btn {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 4px solid white;
+    background-color: transparent;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.control-btn.pressed {
+    transform: scale(0.92);
+}
+
+.yellow-btn {
+    background: linear-gradient(135deg, #FFE259, #FFA751);
+}
+
+.blue-btn {
+    background: linear-gradient(135deg, #89F7FE, #66A6FF);
+}
+
+.orange-btn {
+    background: linear-gradient(135deg, #FF8008, #FFC837);
+}
+
+.yellow-btn.pressed {
+    box-shadow: 0 0 50px #FFA751;
+}
+
+.blue-btn.pressed {
+    box-shadow: 0 0 50px #66A6FF;
+}
+
+.orange-btn.pressed {
+    box-shadow: 0 0 50px #FF8008;
+}
+
+#game-canvas {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
