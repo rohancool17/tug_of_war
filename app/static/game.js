@@ -13,6 +13,7 @@ const endScreen = document.getElementById('end-screen');
 const hcpNameInput = document.getElementById('hcp-name');
 const hcpCodeInput = document.getElementById('hcp-code');
 const introHcpName = document.getElementById('intro-hcp-name');
+const endHcpName = document.getElementById('end-hcp-name');
 
 // Buttons
 const hcpSubmitButton = document.getElementById('hcp-submit-button');
@@ -99,9 +100,11 @@ addTapListener(introStartButton, startGame);
 
 addTapListener(restartButton, () => {
     endScreen.classList.add('hidden');
-    introHcpName.textContent = hcpName;
-    introScreen.classList.remove('hidden');
-    gameStartTime = Date.now();
+    // Clear previous inputs
+    if (hcpNameInput) hcpNameInput.value = "";
+    if (hcpCodeInput) hcpCodeInput.value = "";
+    // Show HCP screen instead of intro screen
+    hcpScreen.classList.remove('hidden');
 });
 
 const btn1 = document.getElementById('btn-1');
@@ -161,6 +164,7 @@ function endGame(winner) {
     console.warn(">>> END GAME TRIGGERED <<< Winner:", winner);
     isGameActive = false;
     gameScreen.classList.add('hidden');
+    if (endHcpName) endHcpName.textContent = hcpName;
     endScreen.classList.remove('hidden');
 
     const endTime = Date.now();
