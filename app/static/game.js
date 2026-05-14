@@ -49,11 +49,23 @@ window.addEventListener('resize', resize);
 resize();
 
 // Navigation helper
+let lastTransitionTime = 0;
+
 function addTapListener(el, callback) {
     if (!el) return;
-    el.addEventListener('click', callback);
-    el.addEventListener('touchstart', (e) => {
+    
+    const handleEvent = (e) => {
+        const now = Date.now();
+        if (now - lastTransitionTime < 400) { // 400ms guard
+            return;
+        }
+        lastTransitionTime = now;
         callback();
+    };
+
+    el.addEventListener('click', handleEvent);
+    el.addEventListener('touchstart', (e) => {
+        handleEvent(e);
     }, { passive: true });
 }
 
@@ -181,8 +193,19 @@ function update() {
     progressIndicator.style.width = `${progressPercent}%`;
     if (score < -50) canvas.classList.add('shake');
     else canvas.classList.remove('shake');
-    if (score >= 100) endGame('dr');
-    if (score <= -100) endGame('hypertension');
+    
+    // Win/Loss Condition
+    if (score >= 100) {
+        isGameActive = false;
+        endGame('dr');
+        return;
+    }
+    if (score <= -100) {
+        isGameActive = false;
+        endGame('hypertension');
+        return;
+    }
+
     draw();
     requestAnimationFrame(update);
 }
